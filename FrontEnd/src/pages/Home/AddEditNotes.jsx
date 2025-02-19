@@ -1,4 +1,5 @@
 import React from "react";
+import TagInput from "../../components/input/TagInput";
 
 const AddEditNotes = () => {
   return (
@@ -12,7 +13,7 @@ const AddEditNotes = () => {
         />
       </div>
       <div className="flex flex-col gap-2 mt-4">
-        <label className="input-label ">Content</label>
+        <label className="input-label text-slate-400 ">Content</label>
         <textarea
           type="text"
           className="text-sm text-slate-950 outline-none bg-slate-50 p-2 rounded"
@@ -21,8 +22,15 @@ const AddEditNotes = () => {
         />
       </div>
       <div className="mt-3">
-        <label className="input-label">Tags</label>
+        <label className="input-label text-slate-400">TAGS</label>
+        <TagInput />
       </div>
+      <button
+        className="bg-blue-500 text-zinc-100 font-medium p-3 rounded-md shadow-md w-full hover:bg-blue-600 transition"
+        onClick={() => {}}
+      >
+        ADD
+      </button>
     </div>
   );
 };
