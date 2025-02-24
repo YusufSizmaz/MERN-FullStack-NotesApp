@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import NoteCard from "../../components/Cards/NoteCard";
-import moment from "moment";
 import { MdAdd, MdComment } from "react-icons/md";
 import AddEditNotes from "./AddEditNotes";
 import Modal from "react-modal";
@@ -99,9 +98,10 @@ const Home = () => {
         <AddEditNotes
           type={openAddEditModal.type}
           noteData={openAddEditModal.data}
-          onclose={() => {
+          onClose={() => {
             setOpenAddEditModal({ isShown: false, type: "add", data: null });
           }}
+          getAllNotes={getAllNotes}
         />
       </Modal>
     </>
