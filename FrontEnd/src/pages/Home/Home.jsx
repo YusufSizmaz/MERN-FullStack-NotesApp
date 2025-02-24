@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import NoteCard from "../../components/Cards/NoteCard";
-import { MdAdd } from "react-icons/md";
+import moment from "moment";
+import { MdAdd, MdComment } from "react-icons/md";
 import AddEditNotes from "./AddEditNotes";
 import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +15,7 @@ const Home = () => {
     data: null,
   });
 
+  const [allNotes, setAllNotes] = useState([]);
   const [userInfo, setUserInfo] = useState(null);
 
   const navigate = useNavigate();
@@ -33,7 +35,22 @@ const Home = () => {
     }
   };
 
+  // Get all notes
+  const getAllNotes = async () => {
+    try {
+      const response = await axiosInstance.get("/get-all-notes");
+
+      if (response.data && response.data.notes) {
+        setAllNotes(response.data.notes);
+      }
+    } catch {
+      erros;
+    }
+    console.log("An unexpected error occurred. Please try again.");
+  };
+
   useEffect(() => {
+    getAllNotes();
     getUserInfo();
     return () => {};
   }, []);
@@ -44,16 +61,19 @@ const Home = () => {
 
       <div className="container mx-auto">
         <div className="grid grid-cols-3 gap-4 mt-8">
-          <NoteCard
-            title="Meeting on 7th April"
-            date="3rd Apr 2025"
-            content="Meeting on 7th April"
-            tags="#Meeting"
-            isPinned={true}
-            onEdit={() => {}}
-            onDelete={() => {}}
-            onPinNote={() => {}}
-          />
+          {allNotes.map((item, index) => (
+            <NoteCard
+              key={item._id}
+              title={item.title}
+              date={item.createdOn}
+              content={item.content}
+              tags={item.tags}
+              isPinned={item.isPinned}
+              onEdit={() => {}}
+              onDelete={() => {}}
+              onPinNote={() => {}}
+            />
+          ))}
         </div>
       </div>
       <button

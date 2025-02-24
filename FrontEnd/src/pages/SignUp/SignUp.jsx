@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import PasswordInput from "../../components/input/Passwordinput";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { validateEmail } from "../../utilis/helper";
+import axiosInstance from "../../utilis/axiosInstance";
 
 const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -29,12 +32,18 @@ const SignUp = () => {
 
     //SignUp AIP CALL
     try {
-      const response = await axiosInstance.post("/login", {
+      const response = await axiosInstance.post("/create-account", {
+        fullName: name,
         email: email,
         password: password,
       });
 
-      // Handle successfull login response
+      // Handle successfull registration response
+      if (response.data && response.data.error) {
+        setError(response.data.message);
+        return;
+      }
+
       if (response.data && response.data.accessToken) {
         localStorage.setItem("token", response.data.accessToken);
         navigate("/dashboard");
