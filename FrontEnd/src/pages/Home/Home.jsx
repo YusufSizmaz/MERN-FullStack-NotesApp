@@ -72,10 +72,9 @@ const Home = () => {
       if (response.data && response.data.notes) {
         setAllNotes(response.data.notes);
       }
-    } catch {
-      erros;
+    } catch (error) {
+      console.log("An unexpected error occurred. Please try again.");
     }
-    console.log("An unexpected error occurred. Please try again.");
   };
 
   useEffect(() => {
@@ -132,6 +131,7 @@ const Home = () => {
             setOpenAddEditModal({ isShown: false, type: "add", data: null });
           }}
           getAllNotes={getAllNotes}
+          showToastMessage={showToastMessage}
         />
       </Modal>
 

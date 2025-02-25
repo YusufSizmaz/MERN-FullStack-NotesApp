@@ -3,7 +3,13 @@ import TagInput from "../../components/input/TagInput";
 import { MdClose } from "react-icons/md";
 import axiosInstance from "../../utilis/axiosInstance";
 
-const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
+const AddEditNotes = ({
+  noteData,
+  type,
+  getAllNotes,
+  onClose,
+  showToastMessage,
+}) => {
   const [title, setTitle] = useState(noteData?.title || "");
   const [content, setContent] = useState(noteData?.content || "");
   const [tags, setTags] = useState(noteData?.tags || []);
@@ -20,6 +26,7 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
       });
 
       if (response.data && response.data.note) {
+        showToastMessage("Note Added Successfully");
         getAllNotes();
         onClose();
       }
@@ -39,13 +46,14 @@ const AddEditNotes = ({ noteData, type, getAllNotes, onClose }) => {
     const noteId = noteData._id;
 
     try {
-      const response = await axiosInstance.put("/edit-note", +noteId, {
+      const response = await axiosInstance.put(`/edit-note/${noteId}`, {
         title,
         content,
         tags,
       });
 
       if (response.data && response.data.note) {
+        showToastMessage("Note Deleted Successfully");
         getAllNotes();
         onClose();
       }
