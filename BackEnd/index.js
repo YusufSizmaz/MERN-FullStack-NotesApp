@@ -1,4 +1,6 @@
 require("dotenv").config();
+const noteRoutes = require("./routes/note.routes");
+app.use("/api/notes", noteRoutes);
 
 const config = require("./config.json");
 const mongoose = require("mongoose");
