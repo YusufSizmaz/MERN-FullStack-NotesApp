@@ -5,7 +5,7 @@ const NoteSchema = new mongoose.Schema({
   content: String,
   tags: [String],
   isPinned: { type: Boolean, default: false },
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  userId: { type: String || mongoose.Schema.Types.ObjectId, ref: "User" },
 });
 
 module.exports = mongoose.model("Note", NoteSchema);
