@@ -35,7 +35,3 @@ Sunucuyu çalıştırın
 ```bash
   npm run start & npm start
 ```
-
-## Ekran Görüntüsü
-
-![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/tr94jno.png?_gl=1*24e0vy*_ga*MTE3MzI0MjUxMS4xNzQwNTcxNzc2*_ga_M9ZRXYS2YN*MTc0MDU3MTc3NS4xLjEuMTc0MDU3MTg3MS42MC4wLjA.)
