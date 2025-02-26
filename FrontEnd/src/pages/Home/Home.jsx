@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import NoteCard from "../../components/Cards/NoteCard";
-import { MdAdd, MdComment } from "react-icons/md";
+import { MdAdd } from "react-icons/md";
 import AddEditNotes from "./AddEditNotes";
 import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
@@ -48,9 +48,7 @@ const Home = () => {
   // Get User Info
   const getUserInfo = async () => {
     try {
-      const response = await axiosInstance.get(
-        "http://localhost:8000/get-user"
-      );
+      const response = await axiosInstance.get("/api/auth/get-user");
       if (response.data && response.data.user) {
         setUserInfo(response.data.user);
       }
@@ -65,15 +63,46 @@ const Home = () => {
   // Get all notes
   const getAllNotes = async () => {
     try {
-      const response = await axiosInstance.get(
-        "http://localhost:8000/get-all-notes"
-      );
+      const response = await axiosInstance.get("/api/notes");
 
       if (response.data && response.data.notes) {
         setAllNotes(response.data.notes);
       }
     } catch (error) {
       console.log("An unexpected error occurred. Please try again.");
+    }
+  };
+
+  // Delete note
+  const handleDelete = async (noteId) => {
+    try {
+      await axiosInstance.delete(`/api/notes/${noteId}`);
+      setAllNotes((prevNotes) =>
+        prevNotes.filter((note) => note._id !== noteId)
+      );
+      showToastMessage("Note deleted successfully", "delete");
+    } catch (error) {
+      console.error("Error deleting note:", error);
+      showToastMessage("Failed to delete note", "delete");
+    }
+  };
+
+  // Pin note
+  const handlePinNote = async (noteId) => {
+    try {
+      const response = await axiosInstance.put(`/api/notes/pin/${noteId}`);
+      if (response.data && response.data.note) {
+        const updatedNotes = allNotes.map((note) =>
+          note._id === noteId ? response.data.note : note
+        );
+
+        // Sıralama işlemi
+        const pinnedNotes = updatedNotes.filter((note) => note.isPinned);
+        const unpinnedNotes = updatedNotes.filter((note) => !note.isPinned);
+        setAllNotes([...pinnedNotes, ...unpinnedNotes]); // Pinli notları en üstte göster
+      }
+    } catch (error) {
+      console.error("Error pinning note:", error);
     }
   };
 
@@ -85,11 +114,11 @@ const Home = () => {
 
   return (
     <>
-      <Navbar userInfo={userInfo} />
+      <Navbar userInfo={userInfo} setAllNotes={setAllNotes} />
 
       <div className="container mx-auto">
         <div className="grid grid-cols-3 gap-4 mt-8">
-          {allNotes.map((item, index) => (
+          {allNotes.map((item) => (
             <NoteCard
               key={item._id}
               title={item.title}
@@ -98,14 +127,14 @@ const Home = () => {
               tags={item.tags}
               isPinned={item.isPinned}
               onEdit={() => handleEdit(item)}
-              onDelete={() => {}}
-              onPinNote={() => {}}
+              onDelete={() => handleDelete(item._id)}
+              onPinNote={() => handlePinNote(item._id)} // Pinleme fonksiyonunu geçir
             />
           ))}
         </div>
       </div>
       <button
-        className="w-16 h-16 flex items-center justify-center rounded-2xl bg-blue-400 hover:bg-blue-600 absolute right-10 bottom-10 cursor-pointer"
+        className="button w-16 h-16 flex items-center justify-center rounded-2xl bg-blue-400 hover:bg-blue-600 absolute right-10 bottom-10 cursor-pointer"
         onClick={() => {
           setOpenAddEditModal({ isShown: true, type: "add", data: null });
         }}

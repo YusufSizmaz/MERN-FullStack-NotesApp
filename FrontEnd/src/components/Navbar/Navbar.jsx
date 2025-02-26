@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import ProfileInfo from "../Cards/ProfileInfo";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "../SearchBar/SearchBar";
+import axiosInstance from "../../utilis/axiosInstance";
 
-const Navbar = ({ userInfo }) => {
+const Navbar = ({ userInfo, setAllNotes }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const navigate = useNavigate();
@@ -13,9 +14,42 @@ const Navbar = ({ userInfo }) => {
     navigate("/login");
   };
 
-  const handleSearch = () => {};
-  const onClearSerach = () => {
+  const handleSearch = async (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    if (query) {
+      try {
+        const response = await axiosInstance.get(
+          `/api/notes/search?query=${query}`
+        );
+        if (response.data && response.data.notes) {
+          setAllNotes(response.data.notes);
+        }
+      } catch (error) {
+        console.error("Error searching notes:", error);
+      }
+    } else {
+      const response = await axiosInstance.get("/api/notes");
+      if (response.data && response.data.notes) {
+        setAllNotes(response.data.notes);
+      }
+    }
+  };
+
+  const handleClearSearch = () => {
     setSearchQuery("");
+    const getAllNotes = async () => {
+      try {
+        const response = await axiosInstance.get("/api/notes");
+        if (response.data && response.data.notes) {
+          setAllNotes(response.data.notes);
+        }
+      } catch (error) {
+        console.error("Error fetching notes:", error);
+      }
+    };
+    getAllNotes();
   };
 
   return (
@@ -24,11 +58,9 @@ const Navbar = ({ userInfo }) => {
 
       <SearchBar
         value={searchQuery}
-        onChange={({ target }) => {
-          setSearchQuery(target.value);
-        }}
+        onChange={(e) => setSearchQuery(e.target.value)}
         handleSearch={handleSearch}
-        onClearSerach={onClearSerach}
+        onClearSearch={handleClearSearch}
       />
 
       <ProfileInfo userInfo={userInfo} onLogout={onLogout} />

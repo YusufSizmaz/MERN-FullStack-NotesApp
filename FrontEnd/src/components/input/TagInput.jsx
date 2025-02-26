@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import { MdAdd, MdClose } from "react-icons/md";
 
 const TagInput = ({ tags, setTags }) => {
-  const [inputValue, setinputValue] = useState("");
+  const [inputValue, setInputValue] = useState("");
 
   const handleInputChange = (e) => {
-    setinputValue(e.target.value);
+    setInputValue(e.target.value);
   };
 
   const addNewTag = () => {
     if (inputValue.trim() !== "") {
-      setTags([...tags, inputValue.trim()]);
-      setinputValue("");
+      setTags((prevTags) => [...prevTags, inputValue.trim()]);
+      setInputValue("");
     }
   };
 
@@ -22,7 +22,7 @@ const TagInput = ({ tags, setTags }) => {
   };
 
   const handleRemoveTag = (tagToRemove) => {
-    setTags(tags.filter((tag) => tag !== tagToRemove));
+    setTags((prevTags) => prevTags.filter((tag) => tag !== tagToRemove));
   };
 
   return (
@@ -32,7 +32,7 @@ const TagInput = ({ tags, setTags }) => {
           {tags.map((tag, index) => (
             <span
               key={index}
-              className="flex items-center gap-2 text-sm text-slate-900 bg-slate-100 px-3 py-1 rounded "
+              className="flex items-center gap-2 text-sm text-slate-900 bg-slate-100 px-3 py-1 rounded"
             >
               # {tag}
               <button
@@ -40,7 +40,7 @@ const TagInput = ({ tags, setTags }) => {
                   handleRemoveTag(tag);
                 }}
               >
-                <MdClose className=" text-black hover:text-red-600" />
+                <MdClose className="text-black hover:text-red-600" />
               </button>
             </span>
           ))}
@@ -51,14 +51,14 @@ const TagInput = ({ tags, setTags }) => {
         <input
           type="text"
           value={inputValue}
-          className="text-sm bg-transparent border border-gray-300 px-3  my-2 py-2 rounded outline-none"
+          className="text-sm bg-transparent border border-gray-300 px-3 my-2 py-2 rounded outline-none"
           placeholder="Add tags"
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
         />
 
         <button
-          className="w-8 h-8 flex items-center justify-center rounded border border-blue-700 hover:bg-blue-700 "
+          className="w-8 h-8 flex items-center justify-center rounded border border-blue-700 hover:bg-blue-700"
           onClick={() => {
             addNewTag();
           }}
