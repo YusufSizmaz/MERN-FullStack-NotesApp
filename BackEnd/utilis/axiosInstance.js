@@ -1,4 +1,3 @@
-// axiosInstance.js
 import axios from "axios";
 
 const axiosInstance = axios.create({
@@ -9,3 +8,5 @@ const axiosInstance = axios.create({
 });
 
 export default axiosInstance;
+
+// axios import ettik, baseurl olarak localhost'da 8000 portunu verdik
