@@ -38,4 +38,4 @@ Sunucuyu çalıştırın
 
 ## Ekran Görüntüsü
 
-![Uygulama Ekran Görüntüsü](./dashboard.png)
+![Uygulama Ekran Görüntüsü](https://hizliresim.com/tr94jno)
