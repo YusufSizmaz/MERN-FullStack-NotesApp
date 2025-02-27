@@ -23,7 +23,7 @@ app.get("/", (req, res) => {
 
 // MongoDB Bağlantısı
 mongoose
-  .connect(config.connectionString)
+  .connect(config.MONGO_URI)
   .then(() => console.log("Database bağlantısı sağlandı. ⭐️⭐️⭐️  "))
   .catch((err) => console.error("DB Connection Error: 🦀", err));
 
