@@ -1,5 +1,5 @@
-const config = require("./config.json");
+require("dotenv").config();
 
 module.exports = {
-  connectionString: config.connectionString,
+  MONGO_URI: process.env.MONGO_URI,
 };
